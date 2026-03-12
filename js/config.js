@@ -1,6 +1,6 @@
 // IMPORTANT: Replace this URL with your deployed Google Apps Script Web App URL
 // See README.md for deployment instructions.
-const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbyVvmmcikSk5m3eFMHi93T__OraInyCZHjwxyDt3uqD52tEOp2IacM5jZqdv2xDABK2PQ/exec';
+const API_BASE_URL = 'https://script.google.com/macros/s/AKfycbwRH2MtunhnwVrlY-JWDMkamfRaqNnF_SXXX5WDy7iq8-_VM5rEPx2cTErhWv_cOj9gqQ/exec';
 
 // Centralized fetch helper
 async function apiRequest(action, data = {}) {
