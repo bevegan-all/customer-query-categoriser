@@ -1,0 +1,49 @@
+### Sample Queries for AI Testing
+
+Use these sample queries to test the accuracy of the Gemini 2.5 Flash categorization logic.
+Each query below is designed to be mapped to a specific category.
+
+---
+
+### Category: Billing
+1. "I was charged $49.99 twice on my credit card this month. Please refund the duplicate charge."
+2. "Where can I find the invoice for my latest annual subscription renewal?"
+3. "I want to cancel my Pro plan immediately, please don't charge me for next month."
+4. "The pricing page says $10/mo but my receipt shows $15. Why is there a discrepancy?"
+5. "My credit card expired and my payment failed. How do I update my payment method?"
+
+---
+
+### Category: Technical Support
+1. "The mobile app keeps crashing immediately after I click the 'Export' button on iOS 16."
+2. "I'm getting a 500 Internal Server Error every time I try to save my profile picture."
+3. "The API endpoint /v2/users is returning unauthorized even though I'm sending a valid Bearer token."
+4. "I can't log in to my account. When I type my password and hit enter, the page just refreshes infinitely."
+5. "The dashboard isn't loading any of my past projects. It's just showing a blank white screen."
+
+---
+
+### Category: Account
+1. "How do I change the email address associated with this account? I'm losing access to my current email soon."
+2. "I lost my phone and need help resetting my Two-Factor Authentication (2FA) settings."
+3. "Please permanently delete my account and erase all my data from your servers."
+4. "I am trying to merge two different accounts into one primary profile. Is that possible?"
+5. "How do I change my display name that shows up on the public forums?"
+
+---
+
+### Category: Feedback
+1. "I really love the new dark mode update, it looks fantastic and is so much easier on my eyes! Great job."
+2. "It would be amazing if you guys added an integration for Slack in the next major release."
+3. "The new navigation menu is slightly confusing compared to the old one. Just my two cents."
+4. "You really need to add a keyboard shortcut for saving. Clicking the button every time is tedious."
+5. "Just wanted to say your customer support team is awesome, thanks for the help yesterday."
+
+---
+
+### Category: General Inquiry
+1. "What are your business hours during the upcoming holidays?"
+2. "Do you offer any discounts or special pricing for non-profit organizations or students?"
+3. "Does your Enterprise plan include on-premise hosting, or is it strictly cloud-based?"
+4. "Who is the CEO of your company and where is your headquarters located?"
+5. "Can I use your software for commercial purposes if I'm on the free tier?"

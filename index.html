@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Query Categorizer</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+  <div class="login-wrapper">
+    <div class="login-card glass">
+      <div class="text-center mb-6">
+        <div class="logo-icon bg-primary text-white mx-auto flex-center mb-4">
+          <i class="ph ph-magic-wand text-3xl"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Welcome Back</h1>
+        <p class="text-sm text-gray-500 mt-2">AI-Powered Support Query Categorizer</p>
+      </div>
+
+      <div class="tabs flex mt-6 mb-6">
+        <button class="tab-btn w-1/2 pb-3 font-medium text-primary border-b-2 border-primary" id="tab-user" onclick="switchTab('user')">User Login</button>
+        <button class="tab-btn w-1/2 pb-3 font-medium text-gray-500 border-b-2 border-transparent" id="tab-admin" onclick="switchTab('admin')">Admin Login</button>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group mb-4">
+          <label for="username" class="sr-only">Username</label>
+          <div class="input-with-icon">
+            <i class="ph ph-user"></i>
+            <input type="text" id="username" placeholder="Enter username" required class="input-field w-full">
+          </div>
+        </div>
+        
+        <div class="form-group mb-6">
+          <label for="password" class="sr-only">Password</label>
+          <div class="input-with-icon">
+            <i class="ph ph-lock-key"></i>
+            <input type="password" id="password" placeholder="Enter password" required class="input-field w-full">
+          </div>
+          <p class="text-xs text-gray-500 mt-2" id="user-hint">New? Just enter any password and you'll be registered.</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full shadow-lg hover:shadow-xl transition-all h-12 flex-center font-semibold rounded-lg" id="login-btn">
+          <span>Sign In</span>
+          <i class="ph ph-arrow-right ml-2 text-lg"></i>
+        </button>
+        <p id="error-msg" class="text-error text-center text-sm mt-4 hidden"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

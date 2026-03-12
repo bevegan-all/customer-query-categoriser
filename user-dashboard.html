@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - Query Categorizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-body">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="flex items-center">
+        <div class="bg-indigo-50 text-indigo-600 w-12 h-12 rounded-xl flex items-center justify-center text-2xl mr-3 shadow-sm border border-indigo-100">
+          🤖
+        </div>
+        <div>
+          <h2 class="font-bold text-gray-900 text-lg">Support AI</h2>
+          <p class="text-xs text-gray-500 uppercase tracking-wide font-medium mt-0.5">User Portal</p>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-list pl-0">
+      <li><a href="#" class="nav-item active"><i class="ph ph-paper-plane-tilt"></i> New Query</a></li>
+      <li><a href="#" class="nav-item"><i class="ph ph-history"></i> My History</a></li>
+    </ul>
+    <div class="px-5 py-2 mb-auto mt-2">
+      <button onclick="handleLogout()" class="btn w-full flex items-center justify-center text-red-500 border border-red-200 hover:bg-red-50 hover:border-red-300 shadow-sm py-2.5 rounded-lg bg-white font-medium transition-colors">
+        <i class="ph ph-sign-out mr-2 text-lg"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <h1 class="text-xl font-semibold text-gray-900">Submit a Query</h1>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-indigo-100 text-primary flex-center font-bold" id="user-avatar">U</div>
+        <span class="font-medium text-sm text-gray-700" id="welcome-name">User</span>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Submit Form Card -->
+        <div class="card p-8 lg:col-span-2 shadow-lg">
+          <h2 class="text-lg font-bold mb-4">How can we help you today?</h2>
+          <p class="text-sm text-gray-500 mb-6">Describe your issue in detail. Our AI will automatically categorize it and route it to the right department.</p>
+          
+          <form id="query-form">
+            <div class="mb-4">
+              <label class="block text-sm font-medium mb-2" for="subject">Subject (Optional)</label>
+              <input type="text" id="subject" class="input-field w-full" placeholder="e.g. Double charged for subscription">
+            </div>
+            <div class="mb-6">
+              <label class="block text-sm font-medium mb-2" for="query-text">Detailed Description</label>
+              <textarea id="query-text" required class="textarea-field" placeholder="Provide as much detail as possible so our AI can accurately categorize your request..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary h-12 px-6 flex items-center justify-center font-medium shadow-md w-auto min-w-[200px]">
+              <i class="ph ph-paper-plane-tilt text-lg mr-2"></i> <span>Submit Request</span>
+            </button>
+          </form>
+        </div>
+        
+        <!-- Info Card -->
+        <div class="card p-6 bg-indigo-50 border-none flex flex-col justify-center items-center text-center">
+          <div class="w-16 h-16 bg-white rounded-full flex-center text-primary text-3xl shadow-sm mb-4">
+            <i class="ph ph-robot"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">AI-Powered Routing</h3>
+          <p class="text-sm text-gray-600">Your queries are instantly analyzed by Gemini 2.5 Flash to ensure fast assignment to our support engineers.</p>
+        </div>
+      </div>
+
+      <!-- History Section -->
+      <div class="mt-8">
+        <h2 class="text-lg font-bold mb-4">My Recent Queries</h2>
+        <div class="card min-h-64 table-container border border-gray-100">
+          <table id="history-table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Query snippet</th>
+                <th>Category</th>
+                <th>Confidence</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+              <!-- Rendered via JS -->
+              <tr><td colspan="6" class="text-center py-8 text-gray-500">Loading history...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Progress Modal -->
+  <div class="modal-overlay" id="progress-modal">
+    <div class="modal-card">
+      <div id="modal-content">
+        <!-- Analyzing State -->
+        <div id="state-analyzing">
+          <div class="text-primary text-4xl mb-4 animate-pulse"><i class="ph ph-brain"></i></div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">Analyzing Request...</h3>
+          <p class="text-sm text-gray-500">Gemini AI is categorizing your query.</p>
+          <div class="progress-track">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+
+        <!-- Success State -->
+        <div id="state-success" class="hidden">
+          <div class="anim-circle bg-success shadow-md mx-auto animate-pop"><i class="ph ph-check-bold"></i></div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">Categorized!</h3>
+          <p class="text-sm text-gray-600 mb-4">Routed successfully by AI.</p>
+          <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+            <div class="flex justify-between items-center mb-1">
+              <span class="text-xs text-gray-500 uppercase tracking-wider">Category</span>
+              <span class="badge" id="result-category">Billing</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-gray-500 uppercase tracking-wider">Confidence</span>
+              <span class="text-sm font-bold text-gray-900" id="result-confidence">95%</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary w-full mt-4" onclick="closeModal()">Close</button>
+        </div>
+
+        <!-- Error State -->
+        <div id="state-error" class="hidden">
+          <div class="anim-circle bg-error shadow-md mx-auto animate-pop"><i class="ph ph-x-bold"></i></div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">Submission Failed</h3>
+          <p class="text-sm text-gray-600 mb-4" id="error-text">Network error occurred.</p>
+          <button class="btn btn-primary w-full" onclick="closeModal()">Try Again</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbot Widget -->
+  <div class="chatbot-fab" id="chatbot-toggle" title="Talk to Support Bot">
+    <i class="ph ph-chat-circle-dots"></i>
+  </div>
+
+  <div class="chatbot-window" id="chatbot-window">
+    <div class="chatbot-header">
+      <div class="flex items-center gap-2">
+        <i class="ph pl-robot text-xl"></i> AI Support
+      </div>
+      <i class="ph ph-x text-lg" id="chatbot-close"></i>
+    </div>
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="chat-msg msg-bot shadow-sm">
+        Hi! I'm your AI support assistant. I can help instantly categorize and log your issue. What seems to be the problem today?
+      </div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chat-input" placeholder="Type your issue..." onkeypress="handleChatPress(event)">
+      <button onclick="sendChatMessage()"><i class="ph ph-paper-plane-right"></i></button>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/user.js"></script>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

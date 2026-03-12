@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Query Categorizer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-body">
+
+  <aside class="sidebar bg-gray-900 border-none">
+    <div class="sidebar-header border-gray-800">
+      <div class="flex items-center text-white">
+        <div class="bg-indigo-500 text-white p-2 rounded-lg mr-3 shadow-lg">
+          <i class="ph ph-chart-line-up text-xl"></i>
+        </div>
+        <div>
+          <h2 class="font-bold">Admin Panel</h2>
+          <p class="text-xs text-gray-400">Query Categorizer</p>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-list mt-6 pl-0">
+      <li><a class="nav-item text-gray-300 hover:bg-gray-800 hover:text-white border-l-4 border-transparent hover:border-indigo-500" style="border-right: none;" onclick="switchAdminTab('dashboard')"><i class="ph ph-squares-four"></i> Overview</a></li>
+      <li><a class="nav-item text-gray-300 hover:bg-gray-800 hover:text-white border-l-4 border-transparent hover:border-indigo-500" style="border-right: none;" onclick="switchAdminTab('queries')"><i class="ph ph-list-dashes"></i> All Queries</a></li>
+      <li><a class="nav-item text-gray-300 hover:bg-gray-800 hover:text-white border-l-4 border-transparent hover:border-indigo-500" style="border-right: none;" onclick="refreshAdminData()"><i class="ph ph-arrows-clockwise"></i> Refresh Data</a></li>
+    </ul>
+    <div class="p-6 border-t border-gray-800 mt-auto pb-8 mb-4">
+      <button onclick="handleLogout()" class="btn btn-secondary w-full flex items-center justify-center shadow-sm py-3 font-medium bg-gray-800 text-red-400 border-none hover:bg-gray-700 transition-colors rounded-lg">
+        <i class="ph ph-sign-out mr-2 text-lg"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content bg-gray-50">
+    <header class="topbar border-gray-200">
+      <div class="flex items-center">
+        <h1 class="text-xl font-semibold text-gray-900 mr-4" id="header-title">Dashboard Overview</h1>
+        <div id="global-spinner" class="spinner ml-2 hidden" style="width: 16px; height: 16px; border-width: 2px;"></div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex-center font-bold">A</div>
+        <span class="font-medium text-sm text-gray-700">Administrator</span>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      
+      <!-- Dashboard View -->
+      <div id="view-dashboard">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <!-- Total -->
+          <div class="card stat-card shadow-sm border-0 border-l-4" style="border-color: var(--primary);">
+            <div class="stat-icon bg-indigo-100 text-indigo-600"><i class="ph ph-tray"></i></div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Total Queries</p>
+              <h3 class="text-2xl font-bold text-gray-900" id="stat-total">-</h3>
+            </div>
+          </div>
+          <!-- Resolved -->
+          <div class="card stat-card shadow-sm border-0 border-l-4" style="border-color: var(--success);">
+            <div class="stat-icon bg-green-100 text-green-600"><i class="ph ph-check-circle"></i></div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Resolution Rate</p>
+              <h3 class="text-2xl font-bold text-gray-900" id="stat-rate">-%</h3>
+            </div>
+          </div>
+          <!-- Billing -->
+          <div class="card stat-card shadow-sm border-0 border-l-4" style="border-color: #3B82F6;">
+            <div class="stat-icon bg-blue-100 text-blue-600"><i class="ph ph-receipt"></i></div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Billing Issues</p>
+              <h3 class="text-2xl font-bold text-gray-900" id="stat-billing">-</h3>
+            </div>
+          </div>
+          <!-- Tech -->
+          <div class="card stat-card shadow-sm border-0 border-l-4" style="border-color: #F59E0B;">
+            <div class="stat-icon bg-orange-100 text-orange-600"><i class="ph ph-wrench"></i></div>
+            <div>
+              <p class="text-sm font-medium text-gray-500">Tech Support</p>
+              <h3 class="text-2xl font-bold text-gray-900" id="stat-tech">-</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="card p-6 shadow-sm border-0">
+            <h3 class="font-bold text-gray-900 mb-6">Distribution by Category (Gemini AI)</h3>
+            <div id="analytics-charts">
+              <!-- JS Injected CSS charts -->
+              <p class="text-sm text-gray-500">Loading charts...</p>
+            </div>
+          </div>
+          
+          <div class="card p-0 shadow-sm border-0 flex flex-col">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+              <h3 class="font-bold text-gray-900">Recent Pending Items</h3>
+              <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-800" onclick="switchAdminTab('queries')">View All</a>
+            </div>
+            <div class="table-container p-0">
+              <table>
+                <tbody id="recent-pending-tbody">
+                  <tr><td class="text-center p-6 text-gray-500">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Queries View -->
+      <div id="view-queries" class="hidden">
+        <div class="card shadow-sm border-0 p-6">
+          <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <div class="relative flex-1 max-w-md">
+              <i class="ph ph-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
+              <input type="text" id="search-input" placeholder="Search queries or username..." class="input-field w-full" onkeyup="filterTable()">
+            </div>
+            <div class="flex gap-2">
+              <select id="filter-category" class="select-field bg-white" onchange="filterTable()">
+                <option value="all">All Categories</option>
+                <option value="Billing">Billing</option>
+                <option value="Technical Support">Tech Support</option>
+                <option value="Account">Account</option>
+                <option value="Feedback">Feedback</option>
+                <option value="General Inquiry">General</option>
+              </select>
+              <select id="filter-status" class="select-field bg-white" onchange="filterTable()">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="resolved">Resolved</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="table-container border border-gray-200 rounded-lg">
+            <table class="w-full text-left">
+              <thead>
+                <tr class="bg-gray-50">
+                  <th class="p-4 font-bold text-xs uppercase tracking-wider text-gray-500">User</th>
+                  <th class="p-4 font-bold text-xs uppercase tracking-wider text-gray-500">Query</th>
+                  <th class="p-4 font-bold text-xs uppercase tracking-wider text-gray-500">AI Category</th>
+                  <th class="p-4 font-bold text-xs uppercase tracking-wider text-gray-500">Confidence</th>
+                  <th class="p-4 font-bold text-xs uppercase tracking-wider text-gray-500">Status</th>
+                  <th class="p-4 font-bold text-xs uppercase tracking-wider text-gray-500">Date</th>
+                </tr>
+              </thead>
+              <tbody id="all-queries-tbody">
+                <tr><td colspan="6" class="text-center p-8 text-gray-500">Loading data from Google Sheets...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
